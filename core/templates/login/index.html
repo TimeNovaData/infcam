@@ -1,6 +1,11 @@
 {% extends "base_infcam.html" %}
 {% load staticfiles %}
 {% load bootstrap %}
+{% load socialaccount %}
+
+{% block extrahead %}
+<link href="{% static 'bower_components/bootstrap-social/bootstrap-social.css' %}" rel="stylesheet">
+{% endblock extrahead %}
 
 {% block content %}
 
@@ -11,6 +16,24 @@
                 <h3 class="panel-title">Área do Cliente</h3>
             </div>
             <div class="panel-body">
+                {% get_providers as socialaccount_providers %}
+
+                {% if socialaccount_providers %}
+                    {% for provider in socialaccount_providers %}
+                        {% if provider.name|lower == 'google' %}
+                            <a class="btn btn-block btn-social btn-{{provider.name|lower}}-plus"
+                                href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+                                <i class="fab fa-{{provider.name|lower}}"></i> Login com {{ provider.name }}
+                            </a>
+                        {% else %}
+                            <a class="btn btn-block btn-social btn-{{provider.name|lower}}"
+                                href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+                                <i class="fab fa-{{provider.name|lower}}"></i>Login com {{ provider.name }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <hr>
                 <form method="post">
                     {% csrf_token %}
                     {{ form|bootstrap }}
