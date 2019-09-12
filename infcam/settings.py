@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'bootstrapform',
     'import_export',
     'outbox_base_layout',
-    'core'
+    'core',
+    'odoo'
 ]
 
 MIDDLEWARE = [
