@@ -1,0 +1,89 @@
+{% extends "base_infcam.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Seja bem-vindo!</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12">
+        <p>
+            Para acessar, entre com o seu e-mail cadastrado na Infcam.
+        </p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-user"></i> Dados Pessoais
+            </div>
+            <div class="panel-body">
+                <form id="form_usuario" action="{% url 'vincular_usuario' %}" method="post" >
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                               required aria-describedby="emailHelp" placeholder="Informe seu E-mail" />
+                        <small id="emailHelp" class="form-text text-muted">
+                            Informe o seu e-mail cadastrado na Infcam para que possamos buscar seus dados de cliente!
+                        </small>
+                        <hr>
+                        <button type="submit" id="botaoConfirmar" class="btn btn-primary" style="width: 100%;">Buscar</button>
+                    </div>
+                </form>
+            </div>
+            <div id="retorno" style="margin: 0px 20px"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extrajs %}
+    <script>
+
+        $('#form_usuario').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!")  // sanity check
+            $.ajax({
+                url : "{% url 'vincular_usuario' %}", // the endpoint
+                type : "POST",
+                data : {
+                    email : $('#email').val()
+                },
+
+                // handle a successful response
+                success : function(data) {
+                    if (data.encontrado) {
+                        $('#retorno').html(
+                            '<div class="alert alert-success" role="alert">' + data.resposta + '</div>'
+                        );
+
+                        $('#email').prop('readonly', true);
+                        $('#botaoConfirmar').hide();
+
+                        setTimeout(function(){
+                            window.location.replace("{% url 'dados_pessoais' %}")
+                        }, 2000);
+                    }else{
+                        $('#retorno').html(
+                            '<div class="alert alert-danger" role="alert">' + data.resposta + '</div>'
+                        );
+                        $('#email').val('');
+                    }
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#retorno').html(
+                        '<div class="alert alert-danger" role="alert">Erro ao pesquisar!</div>'
+                    );
+                }
+            });
+        });
+
+    </script>
+
+    <script src="{% static 'js/django_ajax.js' %}"></script>
+    <script src="{% static 'js/jquery_mask.js' %}"></script>
+{% endblock extrajs %}

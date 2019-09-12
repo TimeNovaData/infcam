@@ -18,12 +18,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from core import urls as core_urls
+from helpdesk import urls as helpdesk_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('examples/', include('outbox_base_layout.urls')),
     path('', include(core_urls)),
+    path('', include(helpdesk_urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "Infcam - Helpdesk"

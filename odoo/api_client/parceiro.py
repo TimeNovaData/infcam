@@ -11,19 +11,15 @@ def get_parceiro(odoo, models, parceiro):
         {
             'fields': [
                 'id',
+                'company_type',
                 'name',
-                'legal_name',
-                'is_company',
-                'cnpj_cpf',
-                'phone',
+                'vat',
                 'mobile',
                 'email',
                 'street',
-                'number',
                 'street2',
                 'zip',
-                'district',
-                'l10n_br_city_id',
+                'city',
                 'state_id'
             ]
         }
@@ -35,32 +31,28 @@ def get_parceiro(odoo, models, parceiro):
         return None
 
 
-def get_id_parceiro(odoo, models, cnpj_cpf):
+def get_id_parceiro(odoo, models, email):
     parceiro = models.execute_kw(
         odoo.db, odoo.uid, odoo.password,
         'res.partner',
         'search_read',
         [
             [
-                ['cnpj_cpf', '=', cnpj_cpf]
+                ['email', '=', email]
             ],
         ],
         {
             'fields': [
                 'id',
+                'company_type',
                 'name',
-                'legal_name',
-                'is_company',
-                'cnpj_cpf',
-                'phone',
+                'vat',
                 'mobile',
                 'email',
                 'street',
-                'number',
                 'street2',
                 'zip',
-                'district',
-                'l10n_br_city_id',
+                'city',
                 'state_id'
             ]
         }
@@ -73,12 +65,12 @@ def get_id_parceiro(odoo, models, cnpj_cpf):
 
 
 def formatar_parceiro(parceiro):
-    parceiro['phone'] = parceiro['phone'] or '-'
+    parceiro['vat'] = parceiro['vat'] or '-'
     parceiro['mobile'] = parceiro['mobile'] or '-'
+    parceiro['email'] = parceiro['email'] or '-'
     parceiro['street'] = parceiro['street'] or '-'
-    parceiro['number'] = parceiro['number'] or '-'
     parceiro['street2'] = parceiro['street2'] or '-'
-    parceiro['district'] = parceiro['district'] or '-'
     parceiro['zip'] = parceiro['zip'] or '-'
+    parceiro['city'] = parceiro['city'] or '-'
 
     return parceiro

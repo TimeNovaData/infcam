@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'import_export',
     'outbox_base_layout',
     'core',
-    'odoo'
+    'odoo',
+    'helpdesk'
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'infcam.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
