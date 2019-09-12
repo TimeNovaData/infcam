@@ -1,0 +1,1 @@
+web: gunicorn infcam.wsgi --log-file -
