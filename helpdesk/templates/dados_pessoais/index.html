@@ -19,13 +19,11 @@
                 <p>
                     Nome: {{ pessoa.name }} <br>
                     {% if pessoa.is_company %}
-                        Razão Social: {{ pessoa.legal_name}}<br>
-                        CNPJ: {{ pessoa.cnpj_cpf }}<br>
+                        CNPJ: {{ pessoa.vat }}<br>
                     {% else %}
-                        CPF: {{ pessoa.cnpj_cpf }}<br>
+                        CPF: {{ pessoa.vat }}<br>
                     {% endif %}
                     <hr>
-                    Telefone: {{ pessoa.phone }}<br>
                     Celular: {{ pessoa.mobile }}<br>
                     E-mail: {{ pessoa.email }}<br>
                 </p>
@@ -40,11 +38,9 @@
             <div class="panel-body">
                 <p>
                     Endereço: {{ pessoa.street }} <br>
-                    Número: {{ pessoa.number }} <br>
-                    Complemento: {{ pessoa.street2 }} <br>
                     CEP: {{ pessoa.zip }} <br>
-                    Bairro: {{ pessoa.district }} <br>
-                    Cidade: {{ pessoa.l10n_br_city_id.1 }} <br>
+                    Bairro: {{ pessoa.street2 }} <br>
+                    Cidade: {{ pessoa.city }} <br>
                     Estado: {{ pessoa.state_id.1 }}
                 </p>
             </div>
