@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrapform',
+    'import_export',
     'outbox_base_layout',
+    'core'
 ]
 
 MIDDLEWARE = [
