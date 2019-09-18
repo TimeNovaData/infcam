@@ -1,0 +1,71 @@
+{% extends "base_infcam.html" %}
+{% load static %}
+{% load bootstrap %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"><i class="fas fa-tools fa-fw"></i> {{title}}</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <a href="{% url 'dashboard_cliente' %}" class="btn btn-info"><i class="far fa-list-alt"></i> Dashboard</a>
+    </div>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <form action="{% url 'novo_reparo' %}" method="post" enctype="multipart/form-data">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fas fa-plus-circle fa-fw"></i> Novo Reparo
+                </div>
+                <div class="panel-body">
+                    {% csrf_token %}
+                    {% if erro %}
+                        <div class="alert alert-danger" role="alert">
+                            {{erro}}
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="produto">Produto</label>
+                        <select class="form-control" id="produto" name="produto" required>
+                            <option value="">Escolha uma Opção</option>
+                            <option value="288">Celular</option>
+                            <option value="297">Controle de Vídeo Game</option>
+                            <option value="290">Desktop</option>
+                            <option value="299">DVR</option>
+                            <option value="296">Impressora</option>
+                            <option value="289">Monitor</option>
+                            <option value="291">Netbook</option>
+                            <option value="264">Notebook</option>
+                            <option value="300">PC All in One</option>
+                            <option value="298">Placa de Vídeo</option>
+                            <option value="293">Placa Mãe</option>
+                            <option value="294">Tablet</option>
+                        </select>
+                        <small id="produtoHelp" class="form-text text-muted">
+                            Escolha o produto para o qual deseja receber atendimento.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="descricao">Descrição</label>
+                        <textarea class="form-control" id="descricao" name="descricao" rows="3" required></textarea>
+                        <small id="descricaoHelp" class="form-text text-muted">
+                            Descreva o problema que o produto escolhido está apresentando.
+                        </small>
+                    </div>
+                    <hr>
+                    <input type="submit" class="btn btn-success" type="Salvar" />
+                </div>
+            </div>
+        </form>
+        <!-- /.panel -->
+    </div>
+</div>
+{% endblock content %}

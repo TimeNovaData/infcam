@@ -1,0 +1,142 @@
+{% extends "base_infcam.html" %}
+{% load static %}
+{% load helpdesk_tag %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</h1>
+    </div>
+</div>
+<!--
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                Novo
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    Novo/Aguardando Avaliação do Técnico
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Em Análise
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Orçamento Pronto
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Aguardando Aprovação
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Aprovado
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Avisado Aguardando Retorno
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                Em Andamento
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    Em Reparo
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Em Teste
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Montar P/ Devolver
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Em Garantia
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Tentativa de Contato S/ Sucesso
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Para ser Faturado
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Exceção de Faturamento
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                Concluído
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    Pronto/Aguardando Retirada
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Reparado/Entregue
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                Cancelado
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    Cancelado/Não Aprovado
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Equipamento Descartado
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Devolvido/Sem Reparo
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+                <li class="list-group-item">
+                    Sem Reparo/Condenado
+                    <span class="pull-right text-muted small"><em>5</em></span>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+-->
+<div class="row">
+    <div class="col-lg-12">
+        <a href="{% url 'novo_reparo' %}" class="btn btn-info"><i class="fas fa-plus-circle fa-fw"></i> Nova Solicitação de Reparo</a>
+    </div>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        {% include 'reparo/lista_resumida.html' %}
+    </div>
+</div>
+{% endblock content %}

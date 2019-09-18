@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from odoo.models import Odoo
 from odoo.models import OdooParceiro
 from odoo.api_client.parceiro import get_parceiro, get_id_parceiro
+from odoo.api_client.reparo import get_reparo, get_reparos, get_ultimos_reparos, criar_reparo
 
 
 # Create your views here.
@@ -66,15 +67,49 @@ def vincular_usuario(request):
 
 @login_required
 @validar_acesso
-def dashboard(request, parceiro, odoo, models):
+def dashboard_cliente(request, parceiro, odoo, models):
+    ultimos_reparos = get_ultimos_reparos(odoo, models, parceiro.id_parceiro)
     return render(
         request,
-        'dashboard.html',
+        'dashboard/cliente.html',
         {
             'title': 'Dashboard',
             'parceiro': parceiro,
+            'ultimos_reparos': ultimos_reparos
         }
     )
+
+
+@login_required
+@validar_acesso
+def novo_reparo(request, parceiro, odoo, models):
+    if request.method == 'POST':
+        produto = request.POST.get('produto', None)
+        descricao = request.POST.get('descricao', None)
+
+        reparo = criar_reparo(odoo, models, parceiro.id_parceiro, produto, descricao)
+
+        if reparo:
+            return redirect(reverse_lazy('dashboard_cliente'))
+        else:
+            return render(
+                request,
+                'reparo/novo.html',
+                {
+                    'title': 'Novo Reparo',
+                    'parceiro': parceiro,
+                    'erro': 'Erro ao cadastrar, tente novamente mais tarde!'
+                }
+            )
+    else:
+        return render(
+            request,
+            'reparo/novo.html',
+            {
+                'title': 'Novo Reparo',
+                'parceiro': parceiro
+            }
+        )
 
 
 @login_required

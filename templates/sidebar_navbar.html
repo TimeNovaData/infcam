@@ -3,16 +3,7 @@
         <ul class="nav" id="side-menu">
             {% if user.is_authenticated %}
                 <li>
-                    <a href="#"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fas fa-users fa-fw"></i> Clientes</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fas fa-user-tie fa-fw"></i> Candidatos</a>
-                </li>
-                <li>
-                    <a href="#"><i class="fas fa-bullhorn fa-fw"></i> Vagas</a>
+                    <a href="{% url 'dashboard_cliente' %}"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</a>
                 </li>
             {% endif %}
         </ul>
