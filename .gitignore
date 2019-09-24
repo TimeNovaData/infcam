@@ -6,4 +6,4 @@
 env_infcam
 media/*
 *pyc
-.env
+*.env
