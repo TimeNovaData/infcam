@@ -95,7 +95,19 @@ WSGI_APPLICATION = 'infcam.wsgi.application'
 
 default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 
-DATABASES = {'default': config('DATABASE_URL', default=default_dburl, cast=dburl),}
+if config('PRODUCTION', default=False, cast=bool):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': config('DATABASE_NAME'),
+            'USER': config('DATABASE_USER'),
+            'PASSWORD': config('DATABASE_PASSWORD'),
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+else:
+    DATABASES = {'default': config('DATABASE_URL', default=default_dburl, cast=dburl), }
 
 
 # Password validation
