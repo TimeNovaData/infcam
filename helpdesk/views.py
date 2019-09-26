@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from odoo.models import Odoo
 from odoo.models import OdooParceiro
 from odoo.api_client.parceiro import get_parceiro, get_id_parceiro
-from odoo.api_client.reparo import get_reparo, get_reparos, get_ultimos_reparos, criar_reparo, get_reparos_tecnico
+from odoo.api_client.reparo import get_reparo, get_reparos, get_ultimos_reparos, criar_reparo, get_reparos_tecnico, alterar_estagio_reparo
 from odoo.api_client.anexo import criar_anexo
 
 
@@ -168,6 +168,52 @@ def adicionar_anexo(request, reparo):
                 {
                     'title': 'Adicionar Anexo',
                     'reparo': reparo
+                }
+            )
+
+
+@login_required
+def alterar_estagio(request, reparo):
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        if request.method == 'POST':
+            try:
+                odoo = Odoo.objects.get(id=1)
+                models = odoo.conectar()
+
+                estagio = request.POST.get('estagio', None)
+
+                mudanca = alterar_estagio_reparo(odoo, models, reparo, estagio)
+                if mudanca:
+                    return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+                else:
+                    return render(
+                        request,
+                        'reparo/alterar_estagio.html',
+                        {
+                            'title': 'Alterar Estágio',
+                            'reparo': reparo,
+                            'erro': 'Erro ao alterar estágio, contacte o administrador!'
+                        }
+                    )
+            except:
+                return render(
+                    request,
+                    'reparo/alterar_estagio.html',
+                    {
+                        'title': 'Alterar Estágio',
+                        'reparo': reparo,
+                        'erro': 'Erro ao alterar estágio, contacte o administrador!'
+                    }
+                )
+        else:
+            return render(
+                request,
+                'reparo/alterar_estagio.html',
+                {
+                    'title': 'Alterar Estágio',
+                    'reparo': reparo,
                 }
             )
 

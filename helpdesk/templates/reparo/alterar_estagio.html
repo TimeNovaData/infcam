@@ -1,0 +1,72 @@
+{% extends "base_infcam.html" %}
+{% load static %}
+{% load bootstrap %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"><i class="fas fa-paperclip fa-fw"></i> {{title}}</h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <a href="{% url 'detalhar_reparo' reparo %}" class="btn btn-info"><i class="fas fa-tools fa-fw"></i> Voltar para o Reparo</a>
+    </div>
+    <hr>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <form action="{% url 'alterar_estagio' reparo %}" method="post">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fas fa-plus-circle fa-fw"></i> Alterar Estágio
+                </div>
+                <div class="panel-body">
+                    {% csrf_token %}
+                    {% if erro %}
+                        <div class="alert alert-danger" role="alert">
+                            {{erro}}
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="estagio">Estágio</label>
+                        <select class="form-control" id="estagio" name="estagio" required>
+                            <option value="">Escolha o Novo Estágio</option>
+                            <option value="novo">Novo/Aguardando Avaliação do Técnico</option>
+                            <option value="analise">Em Análise</option>
+                            <option value="draft">Orçamento Pronto</option>
+                            <option value="aguardando_aprovacao">Aguardando Aprovação</option>
+                            <option value="cancel">Cancelado/Não Aprovado</option>
+                            <option value="confirmed">Aprovado</option>
+                            <option value="aguardando_retorno">Avisado Aguardando Retorno</option>
+                            <option value="teste">Em Teste</option>
+                            <option value="condenado">Sem Reparo/Condenado</option>
+                            <option value="under_repair">Em Reparo</option>
+                            <option value="waiting_stock">Aguardando Peças</option>
+                            <option value="waiting_withdrawal">Pronto/Aguardando Retirada</option>
+                            <option value="done">Reparado/Entregue</option>
+                            <option value="devolvido">Devolvido/Sem Reparo</option>
+                            <option value="montar_devolver">Montar P/ Devolver</option>
+                            <option value="descartado">Equipamento Descartado</option>
+                            <option value="garantia">Em Garantia</option>
+                            <option value="contato_sem_sucesso">Tentativa de Contato S/ Sucesso</option>
+                            <option value="2binvoiced">Para ser Faturado</option>
+                            <option value="invoice_except">Exceção de Faturamento</option>
+                        </select>
+                        <small id="estagioHelp" class="form-text text-muted">
+                            Escolho o novo estágio para alterar a OS.
+                        </small>
+                    </div>
+                    <hr>
+                    <input type="submit" class="btn btn-success" type="Salvar" />
+                </div>
+            </div>
+        </form>
+        <!-- /.panel -->
+    </div>
+</div>
+{% endblock content %}

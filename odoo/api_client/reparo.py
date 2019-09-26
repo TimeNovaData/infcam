@@ -99,5 +99,21 @@ def criar_reparo(odoo, models, parceiro, produto, descricao):
     return reparo or None
 
 
+def alterar_estagio_reparo(odoo, models, reparo, estagio):
+    reparo = models.execute_kw(
+        odoo.db, odoo.uid, odoo.password,
+        'mrp.repair',
+        'write',
+        [
+            [reparo],
+            {
+                'state': estagio
+            }
+        ]
+    )
+
+    return reparo or None
+
+
 def formatar_reparos(reparos):
     return reparos
