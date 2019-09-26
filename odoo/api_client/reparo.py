@@ -91,7 +91,8 @@ def criar_reparo(odoo, models, parceiro, produto, descricao):
             'invoice_method': 'after_repair',
             'state': 'novo',
             'location_id': 9,
-            'location_dest_id': 9
+            'location_dest_id': 9,
+            'responsavel': 1
         }]
     )
 
