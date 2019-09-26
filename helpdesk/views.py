@@ -10,27 +10,31 @@ from django.contrib.auth.decorators import login_required
 from odoo.models import Odoo
 from odoo.models import OdooParceiro
 from odoo.api_client.parceiro import get_parceiro, get_id_parceiro
-from odoo.api_client.reparo import get_reparo, get_reparos, get_ultimos_reparos, criar_reparo
+from odoo.api_client.reparo import get_reparo, get_reparos, get_ultimos_reparos, criar_reparo, get_reparos_tecnico
+from odoo.api_client.anexo import criar_anexo
 
 
 # Create your views here.
 def validar_acesso(funcao):
     def validar(*args, **kwargs):
-        parceiro = OdooParceiro.objects.filter(user=args[0].user.id).first()
+        if args[0].user.has_perm('helpdesk.tecnico_infcam'):
+            return redirect(reverse_lazy('dashboard_tecnico'))
+        else:
+            parceiro = OdooParceiro.objects.filter(user=args[0].user.id).first()
 
-        odoo = Odoo.objects.get(id=1)
-        models = odoo.conectar()
+            odoo = Odoo.objects.get(id=1)
+            models = odoo.conectar()
 
-        if not parceiro:
-            return redirect(reverse_lazy('vincular_usuario'))
+            if not parceiro:
+                return redirect(reverse_lazy('vincular_usuario'))
 
-        return funcao(
-            *args,
-            **kwargs,
-            parceiro=parceiro,
-            odoo=odoo,
-            models=models
-        )
+            return funcao(
+                *args,
+                **kwargs,
+                parceiro=parceiro,
+                odoo=odoo,
+                models=models
+            )
     return validar
 
 
@@ -78,6 +82,95 @@ def dashboard_cliente(request, parceiro, odoo, models):
             'ultimos_reparos': ultimos_reparos
         }
     )
+
+
+@login_required
+def dashboard_tecnico(request):
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        odoo = Odoo.objects.get(id=1)
+        models = odoo.conectar()
+
+        meus_reparos = get_reparos_tecnico(odoo, models, request.user.profile.res_user)
+
+        return render(
+            request,
+            'dashboard/tecnico.html',
+            {
+                'title': 'Dashboard',
+                'ultimos_reparos': meus_reparos
+            }
+        )
+
+
+@login_required
+def detalhar_reparo(request, reparo):
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        odoo = Odoo.objects.get(id=1)
+        models = odoo.conectar()
+
+        reparo = get_reparo(odoo, models, reparo)
+
+        return render(
+            request,
+            'reparo/detalhe.html',
+            {
+                'title': 'Detalhar Reparo',
+                'reparo': reparo
+            }
+        )
+
+
+@login_required
+def adicionar_anexo(request, reparo):
+    import base64
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        if request.method == 'POST':
+            try:
+                odoo = Odoo.objects.get(id=1)
+                models = odoo.conectar()
+
+                anexo = request.FILES.get('anexo', None)
+
+                anexo_base_64 = base64.b64encode(anexo.read()).decode('utf-8')
+                anexo_odoo = criar_anexo(odoo, models, anexo.name, anexo_base_64, anexo.content_type, 'mrp.repair', reparo)
+                if anexo_odoo:
+                    return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+                else:
+                    return render(
+                        request,
+                        'reparo/adicionar_anexo.html',
+                        {
+                            'title': 'Adicionar Anexo',
+                            'reparo': reparo,
+                            'erro': 'Erro ao anexar imagem, contacte o administrador!'
+                        }
+                    )
+            except:
+                return render(
+                    request,
+                    'reparo/adicionar_anexo.html',
+                    {
+                        'title': 'Adicionar Anexo',
+                        'reparo': reparo,
+                        'erro': 'Erro ao anexar imagem, contacte o administrador!'
+                    }
+                )
+        else:
+            return render(
+                request,
+                'reparo/adicionar_anexo.html',
+                {
+                    'title': 'Adicionar Anexo',
+                    'reparo': reparo
+                }
+            )
+
 
 
 @login_required

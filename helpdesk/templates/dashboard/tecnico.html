@@ -1,5 +1,6 @@
 {% extends "base_infcam.html" %}
 {% load static %}
+{% load helpdesk_tag %}
 
 
 {% block content %}
@@ -9,7 +10,7 @@
         <h1 class="page-header"><i class="fas fa-tachometer-alt fa-fw"></i> Dashboard</h1>
     </div>
 </div>
-
+<!--
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6">
         <div class="panel panel-default">
@@ -42,13 +43,6 @@
                     <span class="pull-right text-muted small"><em>5</em></span>
                 </li>
             </ul>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">3 Candidato(s)</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6">
@@ -86,13 +80,6 @@
                     <span class="pull-right text-muted small"><em>5</em></span>
                 </li>
             </ul>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">3 Candidato(s)</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6">
@@ -110,13 +97,6 @@
                     <span class="pull-right text-muted small"><em>5</em></span>
                 </li>
             </ul>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">3 Candidato(s)</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6">
@@ -143,275 +123,14 @@
                 </li>
 
             </ul>
-            <a href="#">
-                <div class="panel-footer">
-                    <span class="pull-left">3 Candidato(s)</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
         </div>
     </div>
 </div>
+-->
 
-<div id="sortableKanbanBoards" class="row">
-    <div class="table-responsive">
-      <table class="table">
-        <tr>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Novo/Aguardando Avaliação do Técnico
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO2" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item2" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Em Análise
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Orçamento Pronto
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Aguardando Aprovação
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Aprovado
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                       Avisado Aguardando Retorno
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Em Reparo
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Em Teste
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Montar P/ Devolver
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="panel panel-primary kanban-col">
-                    <div class="panel-heading">
-                        Em Garantia
-                    </div>
-                    <div class="panel-body">
-                        <div id="TODO" class="kanban-centered">
-                            <article class="kanban-entry grab" id="item1" draggable="false">
-                                <div class="kanban-entry-inner">
-                                    <div class="kanban-label">
-                                        <h2><a href="#">Art Ramadani</a> <span>posted a status update</span></h2>
-                                        <p>
-                                            Tolerably earnestly middleton extremely distrusts she boy now not. Add and offered
-                                            prepare how cordial two promise. Greatly who affixed suppose but enquire compact
-                                            prepare all put. Added forth chief trees but rooms think may.
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- Static Modal -->
-    <div class="modal modal-static fade" id="processing-modal" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="text-center">
-                        <i class="fa fa-refresh fa-5x fa-spin"></i>
-                        <h4>Processando...</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        {% include 'reparo/lista_resumida.html' %}
     </div>
 </div>
 {% endblock content %}
-
-{% block extrajs %}
-<script type="text/javascript" src="{% static 'core/js/kanban.js' %}"></script>
-{% endblock %}
-
-{% block extrastyle %}
-<link href="{% static 'core/css/kanban.css' %}" rel="stylesheet" type="text/css" media="all">
-{% endblock extrastyle %}

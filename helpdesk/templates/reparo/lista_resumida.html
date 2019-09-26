@@ -11,9 +11,13 @@
                     <tr>
                         <th>#</th>
                         <th>Ordem</th>
+                        <th>Cliente</th>
                         <th>Produto</th>
                         <th>Status</th>
                         <th>Técnico</th>
+                        {% if perms.helpdesk.tecnico_infcam %}
+                            <th>Opções</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -21,15 +25,21 @@
                     <tr>
                         <td>{{ reparo.id }}</td>
                         <td>{{ reparo.name }}</td>
+                        <td>{{ reparo.partner_id.1 }}</td>
                         <td>{{ reparo.product_id.1 }}</td>
                         <td>{% texto_status reparo.state %}</td>
                         <td>
                             {% if reparo.responsavel %}
-                                {{ reparo.responsavel }}
+                                {{ reparo.responsavel.1 }}
                             {% else %}
                                 Sem técnico definido
                             {% endif %}
                         </td>
+                        {% if perms.helpdesk.tecnico_infcam %}
+                            <td>
+                                <a href="{% url 'detalhar_reparo' reparo.id %}" class="btn btn-success"><i class="fas fa-search-plus fa-fw"></i> Visualizar</a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

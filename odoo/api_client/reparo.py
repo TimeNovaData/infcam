@@ -10,7 +10,7 @@ def get_reparo(odoo, models, reparo):
 
         ],
         {
-            'fields': ['id', 'name', 'product_id', 'state', 'responsavel']
+            'fields': ['id', 'name', 'product_id', 'state', 'responsavel', 'partner_id']
         }
     )
 
@@ -32,7 +32,7 @@ def get_reparos(odoo, models, parceiro):
 
         ],
         {
-            'fields': ['id', 'name', 'product_id', 'state', 'responsavel']
+            'fields': ['id', 'name', 'product_id', 'state', 'responsavel', 'partner_id']
         }
     )
 
@@ -50,7 +50,26 @@ def get_ultimos_reparos(odoo, models, parceiro):
             ],
         ],
         {
-            'fields': ['id', 'name', 'product_id', 'state', 'responsavel'],
+            'fields': ['id', 'name', 'product_id', 'state', 'responsavel', 'partner_id'],
+            'order': 'id desc'
+        }
+    )
+
+    return formatar_reparos(reparos)
+
+
+def get_reparos_tecnico(odoo, models, tecnico):
+    reparos = models.execute_kw(
+        odoo.db, odoo.uid, odoo.password,
+        'mrp.repair',
+        'search_read',
+        [
+            [
+                ['responsavel', '=', tecnico],
+            ],
+        ],
+        {
+            'fields': ['id', 'name', 'product_id', 'state', 'responsavel', 'partner_id'],
             'order': 'id desc'
         }
     )
