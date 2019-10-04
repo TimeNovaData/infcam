@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '192.168.1.139', 'infcam.dyndns.tv']
+ALLOWED_HOSTS = ['localhost', '*']
 
 
 # Application definition
