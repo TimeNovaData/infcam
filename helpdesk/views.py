@@ -15,6 +15,7 @@ from odoo.api_client.anexo import criar_anexo
 from odoo.api_client.produto import get_produtos
 from odoo.api_client.produto import get_produto
 from odoo.api_client.produto_reparo import criar_produto_reparo
+from odoo.api_client.servico_reparo import criar_servico_reparo
 
 
 # Create your views here.
@@ -239,35 +240,97 @@ def adicionar_produto(request, reparo):
                 if produto_reparo:
                     return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
                 else:
+                    produtos = get_produtos(odoo, models ,tipo=['product'])
                     return render(
                         request,
                         'reparo/adicionar_produto.html',
                         {
                             'title': 'Adicionar Produto',
                             'reparo': reparo,
+                            'produtos': produtos,
                             'erro': 'Erro ao adicionar produto, contacte o administrador!'
                         }
                     )
             except:
+                produtos = get_produtos(odoo, models ,tipo=['product'])
                 return render(
                     request,
                     'reparo/adicionar_produto.html',
                     {
                         'title': 'Adicionar Produto',
                         'reparo': reparo,
+                        'produtos': produtos,
                         'erro': 'Erro ao adicionar produto, contacte o administrador!'
                     }
                 )
         else:
             odoo = Odoo.objects.get(id=1)
             models = odoo.conectar()
-            produtos = get_produtos(odoo, models ,tipo=['product'])
+            produtos = get_produtos(odoo, models, tipo=['product'])
 
             return render(
                 request,
                 'reparo/adicionar_produto.html',
                 {
                     'title': 'Adicionar Produto',
+                    'reparo': reparo,
+                    'produtos': produtos
+                }
+            )
+
+
+@login_required
+def adicionar_servico(request, reparo):
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        if request.method == 'POST':
+            try:
+                odoo = Odoo.objects.get(id=1)
+                models = odoo.conectar()
+
+                produto = request.POST.get('produto', None)
+                quantidade = request.POST.get('quantidade', None)
+
+                obj_produto = get_produto(odoo, models, produto)
+                servico_reparo = criar_servico_reparo(odoo, models, produto, obj_produto['name'], obj_produto['uom_id'][0], obj_produto['list_price'], quantidade, reparo)
+
+                if servico_reparo:
+                    return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+                else:
+                    produtos = get_produtos(odoo, models, tipo=['service'])
+                    return render(
+                        request,
+                        'reparo/adicionar_servico.html',
+                        {
+                            'title': 'Adicionar Serviço',
+                            'reparo': reparo,
+                            'produtos': produtos,
+                            'erro': 'Erro ao adicionar serviço, contacte o administrador!'
+                        }
+                    )
+            except:
+                produtos = get_produtos(odoo, models, tipo=['service'])
+                return render(
+                    request,
+                    'reparo/adicionar_servico.html',
+                    {
+                        'title': 'Adicionar Serviço',
+                        'reparo': reparo,
+                        'produtos': produtos,
+                        'erro': 'Erro ao adicionar serviço, contacte o administrador!'
+                    }
+                )
+        else:
+            odoo = Odoo.objects.get(id=1)
+            models = odoo.conectar()
+            produtos = get_produtos(odoo, models, tipo=['service'])
+
+            return render(
+                request,
+                'reparo/adicionar_servico.html',
+                {
+                    'title': 'Adicionar Serviço',
                     'reparo': reparo,
                     'produtos': produtos
                 }

@@ -9,7 +9,8 @@ from .views import (
     detalhar_reparo,
     adicionar_anexo,
     alterar_estagio,
-    adicionar_produto
+    adicionar_produto,
+    adicionar_servico
 )
 
 urlpatterns = [
@@ -19,6 +20,7 @@ urlpatterns = [
     path('reparo/adicionar_anexo/<int:reparo>', adicionar_anexo, name='adicionar_anexo'),
     path('reparo/alterar_estagio/<int:reparo>', alterar_estagio, name='alterar_estagio'),
     path('reparo/adicionar_produto/<int:reparo>', adicionar_produto, name='adicionar_produto'),
+    path('reparo/adicionar_servico/<int:reparo>', adicionar_servico, name='adicionar_servico'),
     path('usuario/', vincular_usuario, name='vincular_usuario'),
     path('dados_pessoais/', dados_pessoais, name='dados_pessoais'),
     path('novo_reparo/', novo_reparo, name='novo_reparo'),
