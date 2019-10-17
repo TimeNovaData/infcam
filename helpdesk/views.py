@@ -1,3 +1,4 @@
+import os
 import requests
 from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
@@ -140,9 +141,11 @@ def adicionar_anexo(request, reparo):
                 models = odoo.conectar()
 
                 anexo = request.FILES.get('anexo', None)
+                observacao = request.POST.get('observacao', None)
 
                 anexo_base_64 = base64.b64encode(anexo.read()).decode('utf-8')
-                anexo_odoo = criar_anexo(odoo, models, anexo.name, anexo_base_64, anexo.content_type, 'mrp.repair', reparo)
+                nome_anexo = "{}{}".format(observacao, os.path.splitext(str(anexo))[1])
+                anexo_odoo = criar_anexo(odoo, models, nome_anexo, anexo_base_64, anexo.content_type, 'mrp.repair', reparo)
                 if anexo_odoo:
                     return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
                 else:
@@ -233,9 +236,10 @@ def adicionar_produto(request, reparo):
 
                 produto = request.POST.get('produto', None)
                 quantidade = request.POST.get('quantidade', None)
+                observacao = request.POST.get('observacao', None)
 
                 obj_produto = get_produto(odoo, models, produto)
-                produto_reparo = criar_produto_reparo(odoo, models, produto, obj_produto['name'], obj_produto['uom_id'][0], obj_produto['list_price'], quantidade, reparo)
+                produto_reparo = criar_produto_reparo(odoo, models, produto, observacao, obj_produto['uom_id'][0], obj_produto['list_price'], quantidade, reparo)
 
                 if produto_reparo:
                     return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
@@ -291,9 +295,10 @@ def adicionar_servico(request, reparo):
 
                 produto = request.POST.get('produto', None)
                 quantidade = request.POST.get('quantidade', None)
+                observacao = request.POST.get('observacao', None)
 
                 obj_produto = get_produto(odoo, models, produto)
-                servico_reparo = criar_servico_reparo(odoo, models, produto, obj_produto['name'], obj_produto['uom_id'][0], obj_produto['list_price'], quantidade, reparo)
+                servico_reparo = criar_servico_reparo(odoo, models, produto, observacao, obj_produto['uom_id'][0], obj_produto['list_price'], quantidade, reparo)
 
                 if servico_reparo:
                     return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))

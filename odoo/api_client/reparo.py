@@ -1,3 +1,5 @@
+ESTAGIOS_EXCLUIDOS=['cancel', 'condenado', 'done', 'devolvido', 'montar_devolver', 'descartado']
+
 def get_reparo(odoo, models, reparo):
     reparo = models.execute_kw(
         odoo.db, odoo.uid, odoo.password,
@@ -20,7 +22,7 @@ def get_reparo(odoo, models, reparo):
         return None
 
 
-def get_reparos(odoo, models, parceiro):
+def get_reparos(odoo, models, parceiro, estagios_excluidos=ESTAGIOS_EXCLUIDOS):
     reparos = models.execute_kw(
         odoo.db, odoo.uid, odoo.password,
         'mrp.repair',
@@ -28,6 +30,7 @@ def get_reparos(odoo, models, parceiro):
         [
             [
                 ['partner_id', '=', parceiro],
+                ['state', 'not in', estagios_excluidos]
             ],
 
         ],
@@ -39,7 +42,7 @@ def get_reparos(odoo, models, parceiro):
     return formatar_reparos(reparos)
 
 
-def get_ultimos_reparos(odoo, models, parceiro):
+def get_ultimos_reparos(odoo, models, parceiro, estagios_excluidos=ESTAGIOS_EXCLUIDOS):
     reparos = models.execute_kw(
         odoo.db, odoo.uid, odoo.password,
         'mrp.repair',
@@ -47,6 +50,7 @@ def get_ultimos_reparos(odoo, models, parceiro):
         [
             [
                 ['partner_id', '=', parceiro],
+                ['state', 'not in', estagios_excluidos]
             ],
         ],
         {
@@ -58,7 +62,7 @@ def get_ultimos_reparos(odoo, models, parceiro):
     return formatar_reparos(reparos)
 
 
-def get_reparos_tecnico(odoo, models, tecnico):
+def get_reparos_tecnico(odoo, models, tecnico, estagios_excluidos=ESTAGIOS_EXCLUIDOS):
     reparos = models.execute_kw(
         odoo.db, odoo.uid, odoo.password,
         'mrp.repair',
@@ -66,6 +70,7 @@ def get_reparos_tecnico(odoo, models, tecnico):
         [
             [
                 ['responsavel', '=', tecnico],
+                ['state', 'not in', estagios_excluidos]
             ],
         ],
         {

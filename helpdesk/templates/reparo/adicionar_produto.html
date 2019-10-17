@@ -46,9 +46,16 @@
                     </div>
                     <div class="form-group">
                         <label for="quantidade">Quantidade</label>
-                        <input type="number" class="form-control" id="quantidade" name="quantidade" />
+                        <input type="number" class="form-control" id="quantidade" name="quantidade" required />
                         <small id="produtoHelp" class="form-text text-muted">
                             Escolho o produto para adicionar na OS.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="observacao">Observação</label>
+                        <input type="text" class="form-control" id="observacao" name="observacao" required />
+                        <small id="observacaoHelp" class="form-text text-muted">
+                            Observação a ser enviada para o Odoo.
                         </small>
                     </div>
                     <hr>
