@@ -8,6 +8,7 @@ from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from .models import Profile
 from odoo.models import Odoo
 from odoo.models import OdooParceiro
 from odoo.api_client.parceiro import get_parceiro, get_id_parceiro, criar_parceiro
@@ -233,20 +234,40 @@ def alterar_estagio(request, reparo):
                 models = odoo.conectar()
 
                 estagio = request.POST.get('estagio', None)
+                qrcode = request.POST.get('qrcode', None)
+                obj_reparo = get_reparo(odoo, models, reparo)
 
-                mudanca = alterar_estagio_reparo(odoo, models, reparo, estagio)
-                if mudanca:
-                    return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+                usuarios_habilitados = OdooParceiro.objects.filter(id_parceiro=obj_reparo['partner_id'][0])
+
+                assinatura_validada = False
+                for usuario in usuarios_habilitados:
+                    if usuario.user.password == qrcode:
+                        assinatura_validada = True
+
+                if assinatura_validada:        
+                    mudanca = alterar_estagio_reparo(odoo, models, reparo, estagio)
+                    if mudanca:
+                        return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+                    else:
+                        return render(
+                            request,
+                            'reparo/alterar_estagio.html',
+                            {
+                                'title': 'Alterar Estágio',
+                                'reparo': reparo,
+                                'erro': 'Erro ao alterar estágio, contacte o administrador!'
+                            }
+                        )
                 else:
                     return render(
-                        request,
-                        'reparo/alterar_estagio.html',
-                        {
-                            'title': 'Alterar Estágio',
-                            'reparo': reparo,
-                            'erro': 'Erro ao alterar estágio, contacte o administrador!'
-                        }
-                    )
+                            request,
+                            'reparo/alterar_estagio.html',
+                            {
+                                'title': 'Alterar Estágio',
+                                'reparo': reparo,
+                                'erro': 'Assinatura não validada!'
+                            }
+                        )
             except:
                 return render(
                     request,
@@ -514,5 +535,20 @@ def dados_pessoais(request, parceiro, odoo, models):
             'title': 'Dados Pessoais',
             'parceiro': parceiro,
             'pessoa': pessoa
+        }
+    )
+
+
+@login_required
+@validar_acesso
+def qr_code(request, parceiro, odoo, models):
+    usuario = request.user
+
+    return render(
+        request,
+        'usuario/qr_code.html',
+        {
+            'title': 'QR Code',
+            'usuario': usuario
         }
     )

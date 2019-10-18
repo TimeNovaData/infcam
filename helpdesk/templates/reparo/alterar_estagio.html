@@ -3,6 +3,36 @@
 {% load bootstrap %}
 
 {% block content %}
+<script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js"></script>
+<style>
+    .qrcode-text-btn {
+        height: 30px;
+        width: 30px;
+        margin-left: 10px;
+        background: url({% static "core/imgs/qrcode-solid.svg" %}) 50% 100% no-repeat;
+        cursor: pointer;
+    }
+      
+    .qrcode-text-btn > input[type=file] {
+        position: absolute;
+        overflow: hidden;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+    }
+
+    .qrcode-text {
+        padding-right: 1.7em;
+        margin-right: 0;
+        vertical-align: middle;
+    }
+      
+    .qrcode-text + .qrcode-text-btn {
+        width: 1.7em;
+        margin-left: -1.7em;
+        vertical-align: middle;
+    }
+</style>
 
 <div class="row">
     <div class="col-lg-12">
@@ -61,12 +91,43 @@
                             Escolho o novo estágio para alterar a OS.
                         </small>
                     </div>
+                    <div class="form-group">
+                        <input type=text class="qrcode-text" id="qrcode" name="qrcode" required readonly />
+                        <label class=qrcode-text-btn>
+                            <input type=file class="input_qrcode" accept="image/*" capture=environment onchange="openQRCamera(this);" tabindex=-1>
+                        </label>
+                        <small id="qrcodeHelp" class="form-text text-muted">
+                            Clique no ícone de QR Code e tire uma foto do QR de segurança do cliente.
+                        </small>
+                    </div>
                     <hr>
-                    <input type="submit" class="btn btn-success" type="Salvar" />
+                    <input type="submit" class="btn btn-success" type="Salvar" value="Salvar" />
                 </div>
             </div>
         </form>
         <!-- /.panel -->
     </div>
 </div>
+
+<script>
+    function showQRIntro() {
+        return confirm("Use sua câmera e tire uma foto do QR Code do cliente.");
+    }
+
+    function openQRCamera(node) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            node.value = "";
+            qrcode.callback = function(res) {
+            if(res instanceof Error) {
+                alert("No QR code found. Please make sure the QR code is within the camera's frame and try again.");
+            } else {
+                node.parentNode.previousElementSibling.value = res;
+            }
+            };
+            qrcode.decode(reader.result);
+        };
+        reader.readAsDataURL(node.files[0]);
+    }
+</script>
 {% endblock content %}

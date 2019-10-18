@@ -5,6 +5,7 @@ from .views import (
     criar_usuario,
     dashboard_cliente,
     dados_pessoais,
+    qr_code,
     novo_reparo,
     dashboard_tecnico,
     detalhar_reparo,
@@ -29,5 +30,6 @@ urlpatterns = [
     path('usuario/', vincular_usuario, name='vincular_usuario'),
     path('criar_usuario/', criar_usuario, name='criar_usuario'),
     path('dados_pessoais/', dados_pessoais, name='dados_pessoais'),
+    path('qr_code/', qr_code, name='qr_code'),
     path('novo_reparo/', novo_reparo, name='novo_reparo'),
 ]
