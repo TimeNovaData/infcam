@@ -12,7 +12,7 @@ def get_reparo(odoo, models, reparo):
 
         ],
         {
-            'fields': ['id', 'name', 'product_id', 'state', 'responsavel', 'partner_id']
+            'fields': ['id', 'name', 'product_id', 'state', 'responsavel', 'partner_id', 'quotation_notes']
         }
     )
 
@@ -113,6 +113,22 @@ def alterar_estagio_reparo(odoo, models, reparo, estagio):
             [reparo],
             {
                 'state': estagio
+            }
+        ]
+    )
+
+    return reparo or None
+
+
+def adicionar_laudo_reparo(odoo, models, laudo, reparo):
+    reparo = models.execute_kw(
+        odoo.db, odoo.uid, odoo.password,
+        'mrp.repair',
+        'write',
+        [
+            [reparo],
+            {
+                'quotation_notes': laudo
             }
         ]
     )

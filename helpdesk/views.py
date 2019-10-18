@@ -10,13 +10,15 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from odoo.models import Odoo
 from odoo.models import OdooParceiro
-from odoo.api_client.parceiro import get_parceiro, get_id_parceiro
+from odoo.api_client.parceiro import get_parceiro, get_id_parceiro, criar_parceiro
 from odoo.api_client.reparo import get_reparo, get_reparos, get_ultimos_reparos, criar_reparo, get_reparos_tecnico, alterar_estagio_reparo
 from odoo.api_client.anexo import criar_anexo
 from odoo.api_client.produto import get_produtos
 from odoo.api_client.produto import get_produto
 from odoo.api_client.produto_reparo import criar_produto_reparo
 from odoo.api_client.servico_reparo import criar_servico_reparo
+from odoo.api_client.reparo import adicionar_laudo_reparo
+from odoo.api_client.nota import criar_nota
 
 
 # Create your views here.
@@ -72,6 +74,47 @@ def vincular_usuario(request):
             return render(request, 'usuario/index.html')
     else:
         return render(request, 'usuario/index.html')
+
+@login_required
+def criar_usuario(request):
+    if request.method == 'POST':
+        nome = request.POST.get('nome', None)
+        pessoa_fisica_juridica = request.POST.get('pessoa_fisica_juridica', None)
+        cpf_cnpj = request.POST.get('cpf_cnpj', None)
+        celular = request.POST.get('celular', None)
+        email = request.POST.get('email', None)
+
+        odoo = Odoo.objects.get(id=1)
+        models = odoo.conectar()
+
+        parceiro = get_id_parceiro(odoo, models, email)
+
+        if parceiro:
+            try:
+                odoo_parceiro = OdooParceiro(user=request.user, id_parceiro=parceiro['id'])
+                odoo_parceiro.save()
+                data = {
+                    'encontrado': True,
+                    'resposta': 'Cliente encontrado: ' + parceiro['name']
+                }
+            except:
+                data = {
+                    'encontrado': False,
+                    'resposta': 'Erro ao criar usuário, entre em contato com o administrado!'
+                }
+        else:
+            id_parceiro = criar_parceiro(odoo, models, nome, pessoa_fisica_juridica, cpf_cnpj, celular, email)
+            if id_parceiro:
+                odoo_parceiro = OdooParceiro(user=request.user, id_parceiro=id_parceiro)
+                odoo_parceiro.save()
+            else:
+                data = {
+                    'encontrado': False,
+                    'resposta': 'Erro ao criar usuário, entre em contato com o administrado!'
+                }
+        return JsonResponse(data)
+    else:
+        return render(request, 'usuario/novo_parceiro.html',{'title': 'Criar Usuário'})
 
 
 @login_required
@@ -342,6 +385,55 @@ def adicionar_servico(request, reparo):
             )
 
 
+@login_required
+def adicionar_laudo(request, reparo):
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        if request.method == 'POST':
+            try:
+                odoo = Odoo.objects.get(id=1)
+                models = odoo.conectar()
+
+                laudo = request.POST.get('laudo', None)
+
+                obj_reparo = get_reparo(odoo, models, reparo)
+                texto_laudo = "{} / {}".format(obj_reparo['quotation_notes'], laudo)
+                laudo_reparo = adicionar_laudo_reparo(odoo, models, texto_laudo, reparo)
+
+                if laudo_reparo:
+                    return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+                else:
+                    return render(
+                        request,
+                        'reparo/adicionar_laudo.html',
+                        {
+                            'title': 'Adicionar Laudo',
+                            'reparo': reparo,
+                            'erro': 'Erro ao adicionar laudo, contacte o administrador!'
+                        }
+                    )
+            except:
+                return render(
+                    request,
+                    'reparo/adicionar_laudo.html',
+                    {
+                        'title': 'Adicionar Laudo',
+                        'reparo': reparo,
+                        'erro': 'Erro ao adicionar laudo, contacte o administrador!'
+                    }
+                )
+        else:
+            return render(
+                request,
+                'reparo/adicionar_laudo.html',
+                {
+                    'title': 'Adicionar Laudo',
+                    'reparo': reparo
+                }
+            )
+
+
 
 @login_required
 @validar_acesso
@@ -373,6 +465,41 @@ def novo_reparo(request, parceiro, odoo, models):
                 'parceiro': parceiro
             }
         )
+
+
+@login_required
+def adicionar_nota(request, reparo):
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        if request.method == 'POST':
+            odoo = Odoo.objects.get(id=1)
+            models = odoo.conectar()
+            
+            nota = request.POST.get('nota', None)
+            nota = criar_nota(odoo, models, reparo, nota)
+
+            if nota:
+                return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+            else:
+                return render(
+                    request,
+                    'reparo/adicionar_nota.html',
+                    {
+                        'title': 'Nova Nota',
+                        'reparo': reparo,
+                        'erro': 'Erro ao cadastrar, tente novamente mais tarde!'
+                    }
+                )
+        else:
+            return render(
+                request,
+                'reparo/adicionar_nota.html',
+                {
+                    'title': 'Nova Nota',
+                    'reparo': reparo
+                }
+            )
 
 
 @login_required

@@ -64,6 +64,23 @@ def get_id_parceiro(odoo, models, email):
         return None
 
 
+def criar_parceiro(odoo, models, nome, pessoa_fisica_juridica, cpf_cnpj, celular, email):
+    parceiro = models.execute_kw(
+        odoo.db, odoo.uid, odoo.password,
+        'res.partner',
+        'create',
+        [{
+            'company_type': pessoa_fisica_juridica=='True',
+            'name': nome,
+            'vat': cpf_cnpj,
+            'mobile': celular,
+            'email': email,
+        }]
+    )
+
+    return parceiro or None
+
+
 def formatar_parceiro(parceiro):
     parceiro['vat'] = parceiro['vat'] or '-'
     parceiro['mobile'] = parceiro['mobile'] or '-'

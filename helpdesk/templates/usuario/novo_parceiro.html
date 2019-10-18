@@ -12,28 +12,44 @@
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12">
         <p>
-            Para acessar, entre com o seu e-mail cadastrado na Infcam.
+            Para se cadastrar na Infcam, preencha os seus dados abaixo.
         </p>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-user"></i> Dados Pessoais
             </div>
             <div class="panel-body">
-                <form id="form_usuario" action="{% url 'vincular_usuario' %}" method="post" >
+                <form id="form_usuario" action="{% url 'criar_usuario' %}" method="post" >
                     {% csrf_token %}
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" class="form-control" id="nome" name="nome"
+                               required placeholder="Informe seu Nome" />
+                    </div>
+                    <div class="form-group">
+                        <label for="pessoa_fisica_juridica">Pessoa Física ou Jurídica?</label>
+                        <select class="form-control" name="pessoa_fisica_juridica" id="pessoa_fisica_juridica">
+                            <option value="False">Pessoa Física</option>
+                            <option value="True">Pessoa Jurídica</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cpf_cnpj">CPF/CNPJ</label>
+                        <input type="text" class="form-control" id="cpf_cnpj" name="cpf_cnpj"
+                               required placeholder="Informe seu CPF ou CNPJ" />
+                    </div>
+                    <div class="form-group">
+                        <label for="celular">Celular</label>
+                        <input type="text" class="form-control" id="celular" name="celular"
+                               required placeholder="Informe seu Celular" />
+                    </div>
                     <div class="form-group">
                         <label for="email">E-mail</label>
                         <input type="email" class="form-control" id="email" name="email"
-                               required aria-describedby="emailHelp" placeholder="Informe seu E-mail" />
-                        <small id="emailHelp" class="form-text text-muted">
-                            Informe o seu e-mail cadastrado na Infcam para que possamos buscar seus dados de cliente!
-                        </small>
-                        <hr>
-                        <button type="submit" id="botaoConfirmar" class="btn btn-success" style="width: 100%;">Buscar</button>
-                        <hr>
-                        <p>Ainda não é cliente Infcam?</p>
-                        <a href="{% url 'criar_usuario' %}" class="btn btn-primary" style="width: 100%;">Criar um novo acesso</a>
+                               required placeholder="Informe seu E-mail" />
                     </div>
+                    <button type="submit" id="botaoConfirmar" class="btn btn-success btn-block">Cadastrar</button>
+                    <hr>
                 </form>
             </div>
             <div id="retorno" style="margin: 0px 20px"></div>
@@ -51,10 +67,14 @@
             event.preventDefault();
             console.log("form submitted!")  // sanity check
             $.ajax({
-                url : "{% url 'vincular_usuario' %}", // the endpoint
+                url : "{% url 'criar_usuario' %}", // the endpoint
                 type : "POST",
                 data : {
-                    email : $('#email').val()
+                    nome : $('#nome').val(),
+                    pessoa_fisica_juridica : $('#pessoa_fisica_juridica').val(),
+                    cpf_cnpj : $('#cpf_cnpj').val(),
+                    celular : $('#celular').val(),
+                    email : $('#email').val(),
                 },
 
                 // handle a successful response
@@ -81,7 +101,7 @@
                 // handle a non-successful response
                 error : function(xhr,errmsg,err) {
                     $('#retorno').html(
-                        '<div class="alert alert-danger" role="alert">Erro ao pesquisar!</div>'
+                        '<div class="alert alert-danger" role="alert">Erro ao cadastrar!</div>'
                     );
                 }
             });
