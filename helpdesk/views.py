@@ -108,6 +108,10 @@ def criar_usuario(request):
             if id_parceiro:
                 odoo_parceiro = OdooParceiro(user=request.user, id_parceiro=id_parceiro)
                 odoo_parceiro.save()
+                data = {
+                    'encontrado': True,
+                    'resposta': 'Cadastrado com sucesso!'
+                }
             else:
                 data = {
                     'encontrado': False,
@@ -234,15 +238,11 @@ def alterar_estagio(request, reparo):
                 models = odoo.conectar()
 
                 estagio = request.POST.get('estagio', None)
-                qrcode = request.POST.get('qrcode', None)
                 obj_reparo = get_reparo(odoo, models, reparo)
 
                 usuarios_habilitados = OdooParceiro.objects.filter(id_parceiro=obj_reparo['partner_id'][0])
 
-                assinatura_validada = False
-                for usuario in usuarios_habilitados:
-                    if usuario.user.password == qrcode:
-                        assinatura_validada = True
+                assinatura_validada = True
 
                 if assinatura_validada:        
                     mudanca = alterar_estagio_reparo(odoo, models, reparo, estagio)
@@ -287,6 +287,73 @@ def alterar_estagio(request, reparo):
                     'reparo': reparo,
                 }
             )
+
+
+@login_required
+def fechar_os(request, reparo):
+    if not request.user.has_perm('helpdesk.tecnico_infcam'):
+        return HttpResponseForbidden()
+    else:
+        if request.method == 'POST':
+            try:
+                odoo = Odoo.objects.get(id=1)
+                models = odoo.conectar()
+
+                estagio = request.POST.get('estagio', None)
+                qrcode = request.POST.get('qrcode', None)
+                obj_reparo = get_reparo(odoo, models, reparo)
+
+                usuarios_habilitados = OdooParceiro.objects.filter(id_parceiro=obj_reparo['partner_id'][0])
+
+                assinatura_validada = False
+                for usuario in usuarios_habilitados:
+                    if usuario.user.password == qrcode:
+                        assinatura_validada = True
+
+                if assinatura_validada:        
+                    mudanca = alterar_estagio_reparo(odoo, models, reparo, estagio)
+                    if mudanca:
+                        return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+                    else:
+                        return render(
+                            request,
+                            'reparo/alterar_estagio.html',
+                            {
+                                'title': 'Alterar Estágio',
+                                'reparo': reparo,
+                                'erro': 'Erro ao alterar estágio, contacte o administrador!'
+                            }
+                        )
+                else:
+                    return render(
+                            request,
+                            'reparo/fechar_os.html',
+                            {
+                                'title': 'Fechar OS',
+                                'reparo': reparo,
+                                'erro': 'Assinatura não validada!'
+                            }
+                        )
+            except:
+                return render(
+                    request,
+                    'reparo/fechar_os.html',
+                    {
+                        'title': 'Fechar OS',
+                        'reparo': reparo,
+                        'erro': 'Erro ao alterar estágio, contacte o administrador!'
+                    }
+                )
+        else:
+            return render(
+                request,
+                'reparo/fechar_os.html',
+                {
+                    'title': 'Fechar OS',
+                    'reparo': reparo,
+                }
+            )
+
 
 @login_required
 def adicionar_produto(request, reparo):
