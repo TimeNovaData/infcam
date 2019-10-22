@@ -184,29 +184,21 @@ def adicionar_anexo(request, reparo):
         return HttpResponseForbidden()
     else:
         if request.method == 'POST':
-            try:
-                odoo = Odoo.objects.get(id=1)
-                models = odoo.conectar()
+            #try:
+            odoo = Odoo.objects.get(id=1)
+            models = odoo.conectar()
 
-                anexo = request.FILES.get('anexo', None)
-                observacao = request.POST.get('observacao', None)
+            anexo = request.FILES.get('anexo', None)
+            observacao = request.POST.get('observacao', None)
 
-                anexo_base_64 = base64.b64encode(anexo.read()).decode('utf-8')
-                nome_anexo = "{}{}".format(observacao, os.path.splitext(str(anexo))[1])
-                anexo_odoo = criar_anexo(odoo, models, nome_anexo, anexo_base_64, anexo.content_type, 'mrp.repair', reparo)
-                if anexo_odoo:
-                    return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
-                else:
-                    return render(
-                        request,
-                        'reparo/adicionar_anexo.html',
-                        {
-                            'title': 'Adicionar Anexo',
-                            'reparo': reparo,
-                            'erro': 'Erro ao anexar imagem, contacte o administrador!'
-                        }
-                    )
-            except:
+            anexo_comprimido = comprimir_imagem(anexo)
+
+            anexo_base_64 = base64.b64encode(anexo_comprimido).decode('utf-8')
+            nome_anexo = "{}{}".format(observacao, os.path.splitext(str(anexo))[1])
+            anexo_odoo = criar_anexo(odoo, models, nome_anexo, anexo_base_64, anexo.content_type, 'mrp.repair', reparo)
+            if anexo_odoo:
+                return redirect(reverse_lazy('detalhar_reparo', kwargs={'reparo': reparo}))
+            else:
                 return render(
                     request,
                     'reparo/adicionar_anexo.html',
@@ -216,6 +208,16 @@ def adicionar_anexo(request, reparo):
                         'erro': 'Erro ao anexar imagem, contacte o administrador!'
                     }
                 )
+            #except:
+            #    return render(
+            #        request,
+            #        'reparo/adicionar_anexo.html',
+            #        {
+            #            'title': 'Adicionar Anexo',
+            #            'reparo': reparo,
+            #            'erro': 'Erro ao anexar imagem, contacte o administrador!'
+            #        }
+            #    )
         else:
             return render(
                 request,
@@ -619,3 +621,19 @@ def qr_code(request, parceiro, odoo, models):
             'usuario': usuario
         }
     )
+
+
+def comprimir_imagem(arquivo):
+    from PIL import Image
+    import io
+
+    imagem = Image.open(arquivo.file)
+
+    imagem_comprimida = imagem.resize((int(imagem.width*0.5), int(imagem.height*0.5)), Image.ANTIALIAS)
+
+    img_byte_array = io.BytesIO()
+
+    imagem_comprimida.save(img_byte_array, format=imagem.format)
+
+    img_byte_array = img_byte_array.getvalue()
+    return img_byte_array

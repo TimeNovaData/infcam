@@ -45,5 +45,9 @@ def texto_status(status):
         return 'Para ser Faturado'
     elif status == 'invoice_except':
         return 'Exceção de Faturamento'
+    elif status == 'tecnico_caminho':
+        return 'Técnico a Caminho'
+    elif status == 'tecnico_local':
+        return 'Técnico no Local'
     else:
         return ''
